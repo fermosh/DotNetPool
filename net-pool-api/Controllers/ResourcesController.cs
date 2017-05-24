@@ -40,25 +40,30 @@ namespace net_pool_api.Controllers
 
         // POST api/values
         [HttpPost]
-        public async void Post([FromBody]ResourceInputModel value)
+        public async Task<Guid> Post([FromBody]ResourceInputModel value)
         {
+            var newId = await _resourceService.AddResource(value.Name,value.LastOneOnOne);
+            return newId;
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
         public async void Put(Guid id, [FromBody]ResourceInputModel value)
         {
+            _resourceService.UpdateResource(id,value.Name,value.LastOneOnOne);
         }
         // PUT api/Resources/5/OneOnOne
         [HttpPut("{id}/OneOnOne")]
         public async void PutOneOnOne(Guid id, [FromBody]ResourceInputModel value)
         {
+            _resourceService.UpdateLastOneOnOne(id,value.LastOneOnOne);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public async void Delete(Guid id)
         {
+            _resourceService.DeleteResource(id);
         }
     }
 }
