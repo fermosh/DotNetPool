@@ -7,9 +7,26 @@ using Microsoft.AspNetCore.Mvc;
 namespace net_pool_api.Controllers
 {
     using Models;
+    using NetPoolService.Services;
+    using NetPoolService.Models;
+
     [Route("api/[controller]")]
     public class ProjectsController : Controller
     {
+        private readonly IProjectService _projectService;
+        private static readonly Func<Update, UpdateViewModel> _updateProjection = sm => new UpdateViewModel{
+            TimeOfUpdate=sm.UpdateTime,
+            Comments = sm.Comments
+        };
+        private readonly Func<Project,ProjectViewModel> _projectProjection = sm => new ProjectViewModel{
+                    Id = sm.Id,
+                    Name = sm.Name,
+                    LastUpdate = sm.Updates.OrderByDescending( u => u.UpdateTime ).Select(_updateProjection).FirstOrDefault()
+                };
+
+        public ProjectsController(IProjectService projectService){
+            _projectService = projectService;
+        }
         // GET api/projects
         [HttpGet]
         public async Task<IEnumerable<ProjectViewModel>> Get()
