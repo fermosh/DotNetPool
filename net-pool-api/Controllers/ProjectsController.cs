@@ -94,7 +94,7 @@ namespace net_pool_api.Controllers
         [HttpDelete("{projectId}/{resourceId}")]
         public async void DeassignResource(Guid projectId,Guid resourceId)
         {
-            await _projectService.DeassignResource(projectId,resourceId);
+            await _projectService.DeAssignResource(projectId,resourceId);
         }
     }
 }
